@@ -43,3 +43,6 @@ A modern, responsive expense tracking application built with **Angular (standalo
 git clone https://github.com/sayedahmed5529/expense-tracker.git
 cd expense-tracker
 npm install
+###### Demo Login #######
+Email: demo@example.com  
+Password: 123456
