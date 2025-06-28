@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-[#f7f8fc] p-4 font-sans">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-lg font-semibold text-gray-800">Welcome back 👋</h1>
+    <p class="text-sm text-gray-500">Track your spending</p>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <img
+      src="https://i.pravatar.cc/40"
+      alt="Profile"
+      class="w-10 h-10 rounded-full shadow"
+    />
+    <button
+      (click)="logout()"
+      class="text-sm text-red-600 hover:underline"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+
+
+<!-- Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white rounded-xl shadow-md p-4">
+    <p class="text-sm text-gray-500">Total Balance</p>
+    <h2 class="text-xl font-semibold text-gray-800">
+      ${{ totalBalance() | number:'1.2-2' }}
+    </h2>
+  </div>
+  <div class="bg-white rounded-xl shadow-md p-4">
+    <p class="text-sm text-gray-500">Income</p>
+    <h2 class="text-xl font-semibold text-green-600">
+      ${{ totalIncome() | number:'1.2-2' }}
+    </h2>
+  </div>
+  <div class="bg-white rounded-xl shadow-md p-4">
+    <p class="text-sm text-gray-500">Expenses</p>
+    <h2 class="text-xl font-semibold text-red-500">
+      ${{ totalExpenses() | number:'1.2-2' }}
+    </h2>
+  </div>
+</div>
+
+
+  <!-- Filters -->
+  <!-- Filters -->
+<div class="mb-4">
+  <div class="inline-flex bg-white rounded-full shadow px-2 py-1 space-x-2">
+    <button
+      *ngFor="let filter of filters"
+      class="text-sm px-3 py-1 rounded-full transition"
+      [ngClass]="{
+        'bg-purple-100 text-purple-700': filter === selectedFilter(),
+        'text-gray-600 hover:bg-gray-100': filter !== selectedFilter()
+      }"
+      (click)="onFilterChange(filter)"
+    >
+      {{ filter }}
+    </button>
+  </div>
+</div>
+
+  <!-- Recent Expenses -->
+<div class="bg-white rounded-xl shadow-md p-4">
+  <h3 class="text-md font-semibold mb-3 text-gray-800">Recent Expenses</h3>
+
+  <ng-container *ngIf="!isLoading; else loading">
+    <ng-container *ngIf="filteredExpenses().length > 0; else emptyState">
+      <div  class="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let expense of paginatedExpenses()" class="bg-gray-50 rounded-lg shadow p-4 col-span-1 sm:col-span-1 lg:col-span-1">
+          <p class="text-gray-800 font-semibold">{{ expense.title }}</p>
+          <p class="text-sm text-gray-500">{{ expense.date }}</p>
+          <p
+            class="text-sm"
+            [ngClass]="expense.type === 'income' ? 'text-green-500' : 'text-red-500'"
+          >
+            {{ expense.currency }} {{ expense.amount }}
+          </p>
+        </div>
+      </div>
+
+      <!-- زر "See More" -->
+      <div class="text-center mt-4" *ngIf="paginatedExpenses().length < filteredExpenses().length">
+        <button
+          (click)="loadMore()"
+          class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-full transition"
+        >
+          See more
+        </button>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="text-sm text-gray-400 animate-pulse">Loading...</p>
+  </ng-template>
+
+  <ng-template #emptyState>
+    <p class="text-sm text-gray-400">No expenses found</p>
+  </ng-template>
+</div>
+
+
+  <!-- Floating Action Button -->
+  <button (click)="goToAddExpense()"
+    class="fixed bottom-6 right-6 bg-purple-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-purple-700 transition"
+    aria-label="Add Expense"
+  >
+    +
+  </button>
+</div>

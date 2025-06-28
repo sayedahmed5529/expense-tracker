@@ -1,0 +1,82 @@
+<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold text-gray-800">Add Expense</h2>
+    <button
+      (click)="navigateBack()"
+      class="text-sm text-purple-600 hover:text-purple-800  flex items-center gap-1"
+    >
+      <span class="text-lg">←</span> Back
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Title -->
+    <label class="block mb-2 text-sm font-medium text-gray-700">Title</label>
+    <input formControlName="title" type="text" class="input" placeholder="e.g. Grocery shopping" />
+    <div *ngIf="form.get('title')?.touched && form.get('title')?.hasError('required')" class="text-red-600 text-sm">
+      Title is required.
+    </div>
+
+    <!-- Amount -->
+    <label class="block mt-4 mb-2 text-sm font-medium text-gray-700">Amount</label>
+    <input formControlName="amount" type="number" class="input" placeholder="e.g. 250" />
+    <div *ngIf="form.get('amount')?.touched">
+      <div *ngIf="form.get('amount')?.hasError('required')" class="text-red-600 text-sm">
+        Amount is required.
+      </div>
+      <div *ngIf="form.get('amount')?.hasError('min')" class="text-red-600 text-sm">
+        Amount must be greater than 0.
+      </div>
+    </div>
+
+    <!-- Currency -->
+    <label class="block mt-4 mb-2 text-sm font-medium text-gray-700">Currency</label>
+    <select formControlName="currency" class="input appearance-none">
+      <option value="" disabled>Select currency</option>
+      <option value="EGP">EGP</option>
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+    </select>
+    <div *ngIf="form.get('currency')?.touched && form.get('currency')?.hasError('required')" class="text-red-600 text-sm">
+      Currency is required.
+    </div>
+
+    <!-- Date -->
+    <label class="block mt-4 mb-2 text-sm font-medium text-gray-700">Date</label>
+    <input formControlName="date" type="date" class="input" />
+    <div *ngIf="form.get('date')?.touched && form.get('date')?.hasError('required')" class="text-red-600 text-sm">
+      Date is required.
+    </div>
+
+    <!-- Category -->
+    <label class="block mt-4 mb-2 text-sm font-medium text-gray-700">Category</label>
+    <select formControlName="category" class="input appearance-none">
+      <option value="" disabled>Select a category</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+    <div *ngIf="form.get('category')?.touched && form.get('category')?.hasError('required')" class="text-red-600 text-sm">
+      Category is required.
+    </div>
+
+    <!-- Upload Receipt -->
+    <label class="block mt-4 mb-2 text-sm font-medium text-gray-700">Upload Receipt</label>
+    <input type="file" (change)="onFileChange($event)" class="input" />
+
+    <!-- Image Preview -->
+    <div *ngIf="receiptPreview" class="mt-4">
+      <p class="text-sm text-gray-600 mb-2">Preview:</p>
+      <img [src]="receiptPreview" alt="Receipt Preview" class="max-h-40 rounded border" />
+    </div>
+
+    <!-- Save Button -->
+    <button
+      [disabled]="form.invalid || isLoading"
+      type="submit"
+      class="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded"
+    >
+      <span *ngIf="!isLoading">Save</span>
+      <span *ngIf="isLoading" class="animate-pulse text-sm">Saving...</span>
+    </button>
+  </form>
+</div>
