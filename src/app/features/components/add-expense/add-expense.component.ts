@@ -17,7 +17,7 @@ form! : FormGroup;
 categories = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Other','Shopping', 'Health', 'Travel', 'Gas', 'Education'];
 receiptPreview: string | null = null;
 
-isLoading = false;
+isLoading: boolean = false;
 fileUrl: string | null = null;
 constructor(private fb: FormBuilder,
    private expenseService: ExpenseService, private router: Router,
